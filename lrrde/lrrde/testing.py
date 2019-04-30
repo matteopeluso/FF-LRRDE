@@ -8,15 +8,17 @@ import sklearn
 import seaborn as sns
 
 def testing_data(data_set, params, plot = 'y'):
-    os.chdir(data_set.input_params['outdir'])
     """
         Function which evaluates the MSE/MAE of the test setr
         
-        @params data_set
-        @params params     ---> New Params
-        @params old_params 
-        @params plot       --->  flag if 'y' plot results
+        Inputs:
+             data_set : data container
+             params   : new params
+             old_params : old params
+             plot       :  flag if 'y' plot results
     """
+    os.chdir(data_set.input_params['outdir'])
+
 #     if data_set.input_params['n_functions'] in [0,1,2]:
 #         params = np.append([data_set.input_params['q_value']], params)
             

@@ -84,7 +84,8 @@
 </ul>
 <p class="caption"><span class="caption-text">SOURCE DOCUMENTATION:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation Force Field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-fitting-code.html">Python API documentation Fitting</a></li>
 </ul>
 
             
@@ -150,8 +151,8 @@
   <h1>Source code for lrrde.multi_objective</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. module:: multi_objective</span>
-
 <span class="sd">    .. moduleauthor:: Matteo Peluso matteo.peluso@sns.it </span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -166,19 +167,16 @@
 <span class="c1">#from fast_loocv import * </span>
 <span class="c1">#from numba import jit</span>
 
-
-
-
-
-<span class="c1"># ------------------------------------ PROCEDURE DE + LRR ----------------------------------------------#</span>
-
 <div class="viewcode-block" id="eval_lrrde"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.multi_objective.eval_lrrde">[docs]</a><span class="k">class</span> <span class="nc">eval_lrrde</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Procedure of fitting the new data: DE --&gt; Normal Solver/fast LOOCV</span>
-<span class="sd">        </span>
-<span class="sd">        Params:</span>
-<span class="sd">                - data_set  ---&gt; initial data set </span>
-<span class="sd">                - params_de ---&gt; parameters for the  differential evolution search</span>
+
+<span class="sd">        Inputs:</span>
+<span class="sd">            data_set  : data container  </span>
+<span class="sd">            params_de : params differential evolution</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Evaluated coefficients from the ridge regression with corresponding loocv</span>
 <span class="sd">        </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="eval_lrrde.fitness"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.multi_objective.eval_lrrde.fitness">[docs]</a>    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
@@ -205,10 +203,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;xbest&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_set</span><span class="o">.</span><span class="n">input_params</span><span class="p">[</span><span class="s1">&#39;n_functions&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">7</span><span class="p">]:</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                It is necessary to scale the QM reference data if the</span>
-<span class="sd">                value of the atom charge is fixed</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+            
+            <span class="c1">#    It is necessary to scale the QM reference data if the</span>
+            <span class="c1">#    value of the atom charge is fixed</span>
+        
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_set</span><span class="o">.</span><span class="n">input_params</span><span class="p">[</span><span class="s1">&#39;q_value&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_set</span><span class="o">.</span><span class="n">input_params</span><span class="p">[</span><span class="s1">&#39;q_value&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
                 <span class="n">y_c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_set</span><span class="o">.</span><span class="n">input_params</span><span class="p">[</span><span class="s1">&#39;q_value&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">data_set</span><span class="o">.</span><span class="n">q</span>
             <span class="k">else</span><span class="p">:</span>
@@ -240,8 +238,13 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Differential Evolution</span>
 <span class="sd">            </span>
-<span class="sd">            @params borders  ---&gt; borders of the alpha space</span>
-<span class="sd">            @params para     ---&gt; params differential evolution</span>
+<span class="sd">            Inputs:</span>
+<span class="sd">             borders  : borders of the alpha space</span>
+<span class="sd">             para     : params differential evolution</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                evaluation of the hyperparameter which minimize the loocv</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="c1"># DE default params    </span>

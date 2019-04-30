@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Python API documentation &mdash; lrrde 1.0 documentation</title>
+  <title>Python API documentation Force Field &mdash; lrrde 1.0 documentation</title>
   
 
   
@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python API documentation Fitting" href="lrrde-fitting-code.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" /> 
 
   
@@ -85,7 +86,7 @@
 </ul>
 <p class="caption"><span class="caption-text">SOURCE DOCUMENTATION:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API documentation</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API documentation Force Field</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-lrrde.parse_input">lrrde.parse_input.py module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-lrrde.multi_objective">lrrde.multy_objective.py module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-lrrde.normal_solver">lrrde.normal_solver.py module</a></li>
@@ -96,6 +97,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-lrrde.testing">lrrde.testing.py module</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="lrrde-fitting-code.html">Python API documentation Fitting</a></li>
 </ul>
 
             
@@ -141,7 +143,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Python API documentation</li>
+      <li>Python API documentation Force Field</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,8 +162,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="python-api-documentation">
-<h1>Python API documentation<a class="headerlink" href="#python-api-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="python-api-documentation-force-field">
+<h1>Python API documentation Force Field<a class="headerlink" href="#python-api-documentation-force-field" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-lrrde"></span><div class="section" id="module-lrrde.parse_input">
 <span id="lrrde-parse-input-py-module"></span><h2>lrrde.parse_input.py module<a class="headerlink" href="#module-lrrde.parse_input" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-parse_input"></span><table class="docutils field-list" frame="void" rules="none">
@@ -179,7 +181,7 @@
 <em class="property">class </em><code class="descclassname">lrrde.parse_input.</code><code class="descname">input_setup</code><span class="sig-paren">(</span><em>input_params</em>, <em>flag</em>, <em>weight</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#input_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.input_setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function take as input the parsed input files, or forces or energies, the evaluated
 distances, the size of training and test set and returns a class</p>
-<p>Input Parameters:</p>
+<p>Inputs:</p>
 <blockquote>
 <div><ul class="simple">
 <li>input_params[‘topol ‘]       = output of parse_input for topology</li>
@@ -215,18 +217,6 @@ and returns the estimated values of the energies of each frame as Q, C6, C12</p>
 and returns the estimated values of the forces of each frame as Q, C6, C1</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="lrrde.parse_input.input_setup.initialize_energy">
-<code class="descname">initialize_energy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#input_setup.initialize_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.input_setup.initialize_energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize energy set</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="lrrde.parse_input.input_setup.initialize_force">
-<code class="descname">initialize_force</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#input_setup.initialize_force"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.input_setup.initialize_force" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize force set</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="class">
@@ -234,16 +224,16 @@ and returns the estimated values of the forces of each frame as Q, C6, C1</p>
 <em class="property">class </em><code class="descclassname">lrrde.parse_input.</code><code class="descname">parser</code><span class="sig-paren">(</span><em>input_params</em>, <em>flag_files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#parser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.parser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class parser</p>
 <blockquote>
-<div><p>The parser takes as input files which names are already
-decided</p>
-<blockquote>
-<div><p>forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account</p>
-<p>energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction</p>
-<p>coordinates: coordinates128.txt coordinates of the cluster centered on the ion</p>
-<p>topology: topology128.txt topology of the system Charge-sigma-epsilon</p>
-</div></blockquote>
-<dl class="docutils">
-<dt>Input parameters:</dt>
+<div><dl class="docutils">
+<dt>The parser takes as input files which names are already decided</dt>
+<dd><ul class="first last simple">
+<li>forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account</li>
+<li>energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction</li>
+<li>coordinates: coordinates128.txt coordinates of the cluster centered on the ion</li>
+<li>topology: topology128.txt topology of the system Charge-sigma-epsilon</li>
+</ul>
+</dd>
+<dt>Inputs:</dt>
 <dd><p class="first">input_params –&gt; collection of input parameters</p>
 <p class="last">flag_files   –&gt; flag which activate the parsing for a certain type of file</p>
 </dd>
@@ -256,7 +246,7 @@ decided</p>
 <code class="descname">eval_distances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#parser.eval_distances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.parser.eval_distances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method with which is possible to evaluate the distance descriptor</p>
 <dl class="docutils">
-<dt>Input Parameters:</dt>
+<dt>Inputs:</dt>
 <dd>self.coordinates</dd>
 <dt>Returns:</dt>
 <dd>a vector of Eucleudian distances and a matrix of distances</dd>
@@ -268,10 +258,9 @@ decided</p>
 <dl class="class">
 <dt id="lrrde.parse_input.training_set">
 <em class="property">class </em><code class="descclassname">lrrde.parse_input.</code><code class="descname">training_set</code><span class="sig-paren">(</span><em>energy_ts</em>, <em>force_ts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/parse_input.html#training_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.parse_input.training_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes as input the energy and the force training set and build the set of function X,W,v,y
-necessary for the fitting procedure</p>
+<dd><p>Takes as input the energy and the force training set and build the set of function X,W,v,y necessary for the fitting procedure</p>
 <dl class="docutils">
-<dt>Input Parameters:</dt>
+<dt>Inputs:</dt>
 <dd>energy_ts energy training set
 force_ts force training set</dd>
 <dt>Returns:</dt>
@@ -299,12 +288,11 @@ force_ts force training set</dd>
 <em class="property">class </em><code class="descclassname">lrrde.multi_objective.</code><code class="descname">eval_lrrde</code><span class="sig-paren">(</span><em>data_set, params_de=[10, 0.7, 0.9, 50]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/multi_objective.html#eval_lrrde"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.multi_objective.eval_lrrde" title="Permalink to this definition">¶</a></dt>
 <dd><p>Procedure of fitting the new data: DE –&gt; Normal Solver/fast LOOCV</p>
 <dl class="docutils">
-<dt>Params:</dt>
-<dd><ul class="first last simple">
-<li>data_set  —&gt; initial data set</li>
-<li>params_de —&gt; parameters for the  differential evolution search</li>
-</ul>
-</dd>
+<dt>Inputs:</dt>
+<dd>data_set  : data container  
+params_de : params differential evolution</dd>
+<dt>Returns:</dt>
+<dd>Evaluated coefficients from the ridge regression with corresponding loocv</dd>
 </dl>
 <dl class="method">
 <dt id="lrrde.multi_objective.eval_lrrde.Cost">
@@ -317,8 +305,13 @@ and returns a list of lambdas</p>
 <dt id="lrrde.multi_objective.eval_lrrde.de">
 <code class="descname">de</code><span class="sig-paren">(</span><em>borders</em>, <em>para</em>, <em>fun</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/multi_objective.html#eval_lrrde.de"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.multi_objective.eval_lrrde.de" title="Permalink to this definition">¶</a></dt>
 <dd><p>Differential Evolution</p>
-<p>&#64;params borders  —&gt; borders of the alpha space
-&#64;params para     —&gt; params differential evolution</p>
+<dl class="docutils">
+<dt>Inputs:</dt>
+<dd>borders  : borders of the alpha space
+para     : params differential evolution</dd>
+<dt>Returns:</dt>
+<dd>evaluation of the hyperparameter which minimize the loocv</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -354,7 +347,7 @@ the equation reported on the article</p>
 <dl class="function">
 <dt id="lrrde.fast_loocv.fast_loocv">
 <code class="descclassname">lrrde.fast_loocv.</code><code class="descname">fast_loocv</code><span class="sig-paren">(</span><em>c</em>, <em>H</em>, <em>y</em>, <em>l</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/fast_loocv.html#fast_loocv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.fast_loocv.fast_loocv" title="Permalink to this definition">¶</a></dt>
-<dd><p>pancakes</p>
+<dd><p>Mathematical evaluation of the loocv</p>
 </dd></dl>
 
 <dl class="function">
@@ -363,6 +356,13 @@ the equation reported on the article</p>
 <dd><p>This function takes as input a data_set and a set of new values
 and evaluates the Leave One Out Cross Validation Error as
 the equation reported on the article</p>
+<dl class="docutils">
+<dt>Inputs:</dt>
+<dd>data set   : data container
+new values : np array on new coefficient on which evaluate the fast loocv</dd>
+<dt>Returns:</dt>
+<dd>loocv error, mean absolute value</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -420,12 +420,19 @@ the data divided by his std</p>
 <code class="descclassname">lrrde.distances.</code><code class="descname">distance_ion</code><span class="sig-paren">(</span><em>mat</em>, <em>n_atom</em>, <em>index</em>, <em>n_conf</em>, <em>n_vs=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/distances.html#distance_ion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.distances.distance_ion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function which evaluate the distances between our ion and the water molecules,
 returns a vector</p>
-<p>Case index = 1 –&gt; Single ion in aqueous solution
+<p>Inputs:</p>
+<blockquote>
+<div><p>Case index = 1 –&gt; Single ion in aqueous solution
 Case index = 2 –&gt; Single ion with virtual sites in acqueous solution</p>
-<p>&#64;param mat    = matrix of coordinates
-&#64;param n_atom = number of atoms of the system
-&#64;param index  = index of or the single ion, or the last virtual site 
-&#64;param n_vs   = number of virtual sites</p>
+<p>mat    = matrix of coordinates
+n_atom = number of atoms of the system
+index  = index of or the single ion, or the last virtual site 
+n_vs   = number of virtual sites</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>np array of Euclidian distances</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -433,17 +440,36 @@ Case index = 2 –&gt; Single ion with virtual sites in acqueous solution</p>
 <code class="descclassname">lrrde.distances.</code><code class="descname">distance_ion_mat</code><span class="sig-paren">(</span><em>mat</em>, <em>n_atom</em>, <em>index</em>, <em>n_conf</em>, <em>n_vs=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/distances.html#distance_ion_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.distances.distance_ion_mat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function which evaluate the distances between our ion and the water molecules,
 returns a matrix</p>
-<p>Case index = 1 –&gt; Single ion in aqueous solution
+<dl class="docutils">
+<dt>Inputs:</dt>
+<dd><p class="first">Case index = 1 –&gt; Single ion in aqueous solution
 Case index = 2 –&gt; SIngle ion with virtual sites in acqueous solution</p>
-<p>&#64;param mat    = matrix of coordinates
-&#64;param n_atom = number of atoms of the system
-&#64;param index  = index of or the single ion, or the last virtual site 
-&#64;param n_vs   = number of virtual sites</p>
+<p class="last">mat    = matrix of coordinates
+n_atom = number of atoms of the system
+index  = index of or the single ion, or the last virtual site 
+n_vs   = number of virtual sites</p>
+</dd>
+<dt>Returns:</dt>
+<dd>np array of matrix deviation distance</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="section" id="module-lrrde.testing">
 <span id="lrrde-testing-py-module"></span><h2>lrrde.testing.py module<a class="headerlink" href="#module-lrrde.testing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lrrde.testing.testing_data">
+<code class="descclassname">lrrde.testing.</code><code class="descname">testing_data</code><span class="sig-paren">(</span><em>data_set</em>, <em>params</em>, <em>plot='y'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lrrde/testing.html#testing_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lrrde.testing.testing_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which evaluates the MSE/MAE of the test setr</p>
+<dl class="docutils">
+<dt>Inputs:</dt>
+<dd>data_set : data container
+params   : new params
+old_params : old params
+plot       :  flag if ‘y’ plot results</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
@@ -454,6 +480,8 @@ Case index = 2 –&gt; SIngle ion with virtual sites in acqueous solution</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lrrde-fitting-code.html" class="btn btn-neutral float-right" title="Python API documentation Fitting" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="tutorial.html" class="btn btn-neutral" title="Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

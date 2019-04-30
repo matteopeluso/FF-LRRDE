@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-In this section we are going to go through the entire procedure for the parameterization of 
+In this section we are going to go through the entire fitting procedure for the parameterization of 
 the non-bonded component of a force field of an ion in condensed phase.
 
 Theory
@@ -21,17 +21,264 @@ Linear Ridge Regression:
 
         :math:`J = \frac{1}{2M} \sum_j^M \biggl( y - \sum_j^{N_{functions}} C_j \phi_j(x,\theta) \biggl)^2 + \lambda\sum_j^{N_{functions}} C_j^2`
 
-Tutorial Notebook
-~~~~~~~~~~~~~~~~~~~~~
-We first need to go to the directory where the module are stored and load them
+        where :math:`N_b` is the number of the target quantities, :math:`w_b` is the scaled weight of the :math:`b-th` set of targets, of size :math:`M_B`, calculated as:
+       
+        :math:`w_b = \frac{w^{'}_{b}}{\sqrt{\frac{1}{M_b}\sum_l^{M_b} (y_{l,b} - y_b)^2}}`
+
+        where :math:`w_b^{'}` are the effective weights, subjects to constraint :math:`w_b^{'} \in [0,1]` and :math:`\sum_b^{N_b} w_b^{'} = 1`.
+        The minimization of the weighted cost function with respect to the linear parameters is given by a normal equation that includes the weights:
+
+        :math:`\tilde{C_j} = (H^T W H + 2M\lambda I)^{-1} (H^T Wy)`
+
+        being :math:`W` the diagonal matrix containing the :math:`w_b` values and :math:`M = \sum_b^{N_b} M_b`.
+
+        The evaluation of the Normal equation can be performed if the values of :math:`\lambda` and :math:`\{ \theta \}` parameters have been already
+        established, therefore they are considered as hyperparameters. In order to obtain the optimal values of the hyperparameters we exploited the 
+        minimization of the cross-validation error:
+        
+        :math:`LOOCV_{error}(\lambda,{\theta}) =  \sum_b^{N_b} \biggl ( \frac{1}{M} \sum_l^M  ( \frac{ y_l - y_{est}(x_l,\lambda,{\theta})}{1 - h_l} )^2  w_b \biggl)`
+
+        :math:`h_l = \frac{1}{M} + \frac{w_l ( \tilde{\varphi_l} - \overline{\tilde{\varphi}})^2 }{ \sum_{l'}^M w_{l^{'}} (\tilde{\varphi_{l'}} - \overline{\tilde{\varphi}})^2}`
+        
+        Cross-validation is a resampling method applied in statistical learning for the model assessment and model selection. The quality of a model 
+        is measured by the \textit{generalization error}, the expected prediction error on new data.
+        
+        The minimization of the LOOCV_{error} with respect to :math:`\lambda` and :math:`\theta` is a non convex optimization, therefore a meta-heuristic 
+        approach is necessary to search for the global minimum of the objective function. To attain this task we exploited the evolutionary algorithm known 
+        as differential evolution, DE.
+
+
+Tutorial Notebook Fitting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Example 1
+---------
+
+Example 1: —- Fitting of a function x*sin(x) with a polynomial of 5th degree
 
 .. code:: ipython3
 
-    ## Matteo Peluso Febbraio 2019
-    # PhD Student: Methods and Model for Molecular Sciences
-    # Scuola Normale Superiore, Pisa
-    # email: matteo.peluso@sns.it
+    # First Example
     
+    # General imports
+    import os
+    import time
+    import numpy as np
+    import seaborn
+    seaborn.set(style='whitegrid')
+    seaborn.set_context('paper')
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # Directory with the ensemble of functions
+    fun_path = "/path/tomodule/"
+    os.chdir(fun_path)
+    
+    # Import of modules
+    from fit_parser_g        import *
+    from fit_multi_objective import *
+    from fit_normal_solver   import *
+    from fit_fast_loocv      import *
+    from fit_testing         import *
+    from fit_tool            import *
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    # Directory with the input files
+    path_data = "/path/tofile/"
+    os.chdir(path_data)
+    
+    # Definition of input variabels
+    def f(x):
+        """ function to approximate by polynomial interpolation"""
+        return x * np.sin(x)
+    
+    # generate points and keep a subset of them
+    x_ns   = np.linspace(0, 10, 250)
+    x_plot = np.linspace(0, 10, 250)
+    
+    # Reference data
+    y = f(x_ns)
+    
+    # Input data
+    X = np.vstack([x_ns, x_ns**2, x_ns**3, x_ns**4, x_ns**5]).T
+    
+    # Standardize the input variables
+    mean, sigma, x_std = standardize_data(X)
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    # Work Directory
+    work_data = "/path/towork/"
+    os.chdir(path_data)
+    
+    # Input parameters for the Ridge Regression
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    input_params            = {}
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    input_params['y']       = y                                      # Reference data
+    input_params['x']       = x_std                                  # Standardize X 
+    input_params['sigma']   = sigma                                  # Standard Deviation of the X
+    input_params['borders'] = np.matrix([10e-15, 10e-1])             # Borders for the search of the hyperparameter lambda
+    input_params['n_confs'] = np.shape(x_ns)[0]                      # Size of the input set 
+    input_params['n_train'] = np.shape(x_ns)[0]*0.8                  # Definition of the training set percentage 
+    input_params['outdir']  = work_data                              # Where to save output figures
+    input_params['de']      = [10, 0.7, 0.9, 50]                     # Parameters for the Differential Evolution 
+                            # [n,  F,   Cr, step_delta]  
+                            # n:population, F:scaling, Cr:crossover probability, step_delta:number of generations before stop
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # Generation of the Test and Training Sets
+    data_set = gen_data_set(input_params)
+    data_set.gen_ts()
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # Fitting 
+    t0 = time.time()
+    print("-------")
+    print("Evaluating parameters")
+    print("-------")
+    
+    lrrde = eval_lrrde(data_set, params_de = data_set.ip['de'])
+    lrrde.eval_de()
+    
+    # Plot evolution of the cost function evaluation
+    lrrde.plt_evo(save=False)                  # If save == True save the image
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+     
+    # Testing 
+    t1 = time.time()
+    total = t1-t0
+    print("time fitting {}".format(total))
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    print("-------")
+    print("Testing model")
+    print("-------")
+    # Prediction and error evaluation
+    testing_data(data_set, lrrde.params,'y', save=False)                  # If save == True save the image
+
+
+Output statistics
+
+.. parsed-literal::
+
+    -------
+    Evaluating parameters
+    -------
+    LOOCV error 66.3, lambda [[6.02310102e-11]], Numero Iterazioni 251, Parametri : [ 3.44861341 -1.32372505 -0.15258124  0.07714854 -0.00530177]
+    time fitting 3.5 s
+    -------
+    Testing model
+    -------
+    MSE (lrr-de) = 0.52
+    MAE (lrr-de) = 0.57
+
+Example 2
+---------
+
+Example 2: —- Comparison of fittings of a function x*sin(x) with a
+polynomial of 5th, 4th, 3th degree
+
+.. code:: ipython3
+
+    # Second Example
+    
+    # generate points 
+    x_ns   = np.linspace(0, 10, 250)
+    x_plot = np.linspace(0, 10, 250)
+    
+    # Reference data
+    y = f(x_ns)
+    
+    X3 = np.vstack([x_ns, x_ns**2, x_ns**3]).T
+    X4 = np.vstack([x_ns, x_ns**2, x_ns**3, x_ns**4]).T
+    X5 = np.vstack([x_ns, x_ns**2, x_ns**3, x_ns**4, x_ns**5]).T
+    
+    # Standardize the input variables
+    mean, sigma3, x_std3 = standardize_data(X3)
+    mean, sigma4, x_std4 = standardize_data(X4)
+    mean, sigma5, x_std5 = standardize_data(X5)
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    input_params['y']       = y                                       # Reference data
+    input_params['x']       = x_std3                                  # Standardize X 
+    input_params['sigma']   = sigma3                                  # Standard Deviation of the X
+    data_set3 = gen_data_set(input_params)
+    data_set3.gen_ts()
+    lrrde3 = eval_lrrde(data_set3, params_de = data_set3.ip['de'])
+    lrrde3.eval_de()
+    testing_data(data_set3, lrrde3.params,'y')
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    input_params['y']       = y                                      # Reference data
+    input_params['x']       = x_std4                                  # Standardize X 
+    input_params['sigma']   = sigma4                                  # Standard Deviation of the X
+    data_set4 = gen_data_set(input_params)
+    data_set4.gen_ts()
+    lrrde4 = eval_lrrde(data_set4, params_de = data_set4.ip['de'])
+    lrrde4.eval_de()
+    testing_data(data_set4, lrrde4.params,'y')
+    
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    input_params['y']       = y                                      # Reference data
+    input_params['x']       = x_std5                                 # Standardize X 
+    input_params['sigma']   = sigma5                                 # Standard Deviation of the X
+    data_set5 = gen_data_set(input_params)
+    data_set5.gen_ts()
+    lrrde5 = eval_lrrde(data_set5, params_de = data_set5.ip['de'])
+    lrrde5.eval_de()
+    testing_data(data_set5, lrrde5.params,'y')
+    
+    plt.figure(dpi=100)
+    sns.set_context("paper")
+    plt.plot(x_plot, np.dot(X3,lrrde3.params.T), label='polynomial 3')
+    plt.plot(x_plot, np.dot(X4,lrrde4.params.T), label='polynomial 4')
+    plt.plot(x_plot, np.dot(X5,lrrde5.params.T), label='polynomial 5')
+    plt.plot(x_plot, y, label='reference')
+    plt.legend()
+    
+    plt.show()
+
+
+Output statistics
+
+.. parsed-literal::
+
+    LOOCV error 579.3, lambda [[2.26550152e-05]], Numero Iterazioni 251, Parametri : [-1.72009749  0.52716683 -0.03392483]
+    MSE (lrr-de) = 6.1
+    MAE (lrr-de) = 1.9
+    -------
+    LOOCV error 97.3, lambda [[5.73169707e-09]], Numero Iterazioni 251, Parametri : [ 7.38439328 -4.93497868  0.92061274 -0.05078846]
+    MSE (lrr-de) = 1.0
+    MAE (lrr-de) = 0.87
+    -------
+    LOOCV error 66.3, lambda [[6.0238273e-11]], Numero Iterazioni 251, Parametri : [ 3.44861227 -1.32372413 -0.15258149  0.07714857 -0.00530177]
+    MSE (lrr-de) = 0.52
+    MAE (lrr-de) = 0.57
+    -------
+
+.. image:: output_2_1.png
+
+.. image:: output_2_2.png
+
+.. image:: output_2_3.png
+
+.. image:: output_2_4.png
+
+
+
+Tutorial Notebook Force Field
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Initialization
+--------------
+
+Go to the directory where the module are stored and load them
+
+.. code:: ipython3
+
     import os
     import time
     import seaborn
@@ -49,7 +296,7 @@ We first need to go to the directory where the module are stored and load them
     from normal_solver   import *
     from testing         import *
 
-Is then necessary to set the initial parameters necessary for the fitting procedure:
+Set the initial parameters necessary for the fitting procedure:
 
 .. code:: ipython3
 
@@ -102,6 +349,10 @@ the value of the energies and the forces evaluated through the following formula
 
         :math:`F = \frac{\partial E}{\partial r}`
 
+
+Training-Test Set
+-----------------
+
 .. code:: ipython3
 
     # ------------------------ Training Set---------------------------------#
@@ -139,6 +390,8 @@ the value of the energies and the forces evaluated through the following formula
     Time employed to build the Training and Test Set 4.76 s
     ----------------------------------------------------------------
 
+Fitting
+-------
 
 .. code:: ipython3
 
@@ -180,14 +433,13 @@ the value of the energies and the forces evaluated through the following formula
 
 .. image:: output_3_1.png
 
-
-
 .. image:: output_3_2.png
-
-
 
 .. image:: output_3_3.png
 
+
+Testing
+-------
 
 .. code:: ipython3
 
@@ -210,39 +462,31 @@ the value of the energies and the forces evaluated through the following formula
     Prediction
     ----------------------------------------------------------------
     SET: energy, # of water molecules 128
-    MSE (lrr-de) = 13339.629337222814
-    MAE (opls) = 347.4917715109093
-    MAE (lrr-de) = 87.21925229157347
+    MSE (lrr-de) = 13339.6
+    MAE (opls)   = 347.5
+    MAE (lrr-de) = 87.2
     -------
     SET: energy, # of water molecules 32
-    MSE (lrr-de) = 11615.35849800013
-    MAE (opls) = 336.7863102030593
-    MAE (lrr-de) = 68.96160010746381
+    MSE (lrr-de) = 11615.4
+    MAE (opls)   = 336.8
+    MAE (lrr-de) = 68.9
     -------
     SET: force, # of water molecules 128
-    MSE (lrr-de) = 458332.17610483547
-    MAE (opls) = 564.9992088283504
-    MAE (lrr-de) = 218.35637031641872
+    MSE (lrr-de) = 458332.2
+    MAE (opls)   = 564.9
+    MAE (lrr-de) = 218.4
     -------
     SET: force, # of water molecules 32
-    MSE (lrr-de) = 514995.9852854986
-    MAE (opls) = 620.9854602307053
-    MAE (lrr-de) = 181.37928973787442
+    MSE (lrr-de) = 514995.9
+    MAE (opls)   = 620.9
+    MAE (lrr-de) = 181.4
     -------
-
-
 
 .. image:: output_4_1.png
 
-
-
 .. image:: output_4_2.png
 
-
-
 .. image:: output_4_3.png
-
-
 
 .. image:: output_4_4.png
 

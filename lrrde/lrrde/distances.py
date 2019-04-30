@@ -5,13 +5,18 @@ def distance_ion(mat, n_atom, index, n_conf, n_vs = 0):
         Function which evaluate the distances between our ion and the water molecules,
         returns a vector
         
-        Case index = 1 --> Single ion in aqueous solution
-        Case index = 2 --> Single ion with virtual sites in acqueous solution
+        Inputs:
+
+            Case index = 1 --> Single ion in aqueous solution
+            Case index = 2 --> Single ion with virtual sites in acqueous solution
         
-        @param mat    = matrix of coordinates
-        @param n_atom = number of atoms of the system
-        @param index  = index of or the single ion, or the last virtual site 
-        @param n_vs   = number of virtual sites
+            mat    = matrix of coordinates
+            n_atom = number of atoms of the system
+            index  = index of or the single ion, or the last virtual site 
+            n_vs   = number of virtual sites
+
+        Returns:
+           np array of Euclidian distances
     """
     
     if index == 1:
@@ -21,9 +26,7 @@ def distance_ion(mat, n_atom, index, n_conf, n_vs = 0):
         return np.array(d, dtype='float')
     
     elif index != 1:
-        """
-            Case of Virtual Site
-        """
+        #Case of Virtual Site
         if n_vs == 2:
             n_atom = n_atom + n_vs
             d, d_vs1, d_vs2      = [], [], []
@@ -50,13 +53,18 @@ def distance_ion_mat(mat, n_atom, index, n_conf, n_vs = 0):
         Function which evaluate the distances between our ion and the water molecules,
         returns a matrix
         
-        Case index = 1 --> Single ion in aqueous solution
-        Case index = 2 --> SIngle ion with virtual sites in acqueous solution
+        Inputs:
+            Case index = 1 --> Single ion in aqueous solution
+            Case index = 2 --> SIngle ion with virtual sites in acqueous solution
+            
+            mat    = matrix of coordinates
+            n_atom = number of atoms of the system
+            index  = index of or the single ion, or the last virtual site 
+            n_vs   = number of virtual sites
         
-        @param mat    = matrix of coordinates
-        @param n_atom = number of atoms of the system
-        @param index  = index of or the single ion, or the last virtual site 
-        @param n_vs   = number of virtual sites
+        Returns:
+            np array of matrix deviation distance
+
     """
     if index == 1:
         d      = []
@@ -69,9 +77,7 @@ def distance_ion_mat(mat, n_atom, index, n_conf, n_vs = 0):
     elif index != 1:
                
         if n_vs == 2:
-            """
-                Linear Geometry
-            """
+            #    Linear Geometry
             n_atom = n_atom + n_vs
             d, dvs1, dvs2      = [], [], []
             

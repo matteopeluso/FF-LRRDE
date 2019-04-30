@@ -84,7 +84,8 @@
 </ul>
 <p class="caption"><span class="caption-text">SOURCE DOCUMENTATION:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation Force Field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-fitting-code.html">Python API documentation Fitting</a></li>
 </ul>
 
             
@@ -157,41 +158,28 @@
 <span class="sd">    .. moduleauthor:: Matteo Peluso</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1">#from lrr_de_constant import *</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="c1">#from read import *</span>
-<span class="c1">#from distances import *</span>
-<span class="c1">#from tool import *</span>
-
 <div class="viewcode-block" id="parser"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.parser">[docs]</a><span class="k">class</span> <span class="nc">parser</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class parser</span>
 
-<span class="sd">       The parser takes as input files which names are already</span>
-<span class="sd">       decided</span>
-<span class="sd">            forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account</span>
+<span class="sd">       The parser takes as input files which names are already decided</span>
+<span class="sd">            * forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account</span>
 
-<span class="sd">            energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction</span>
+<span class="sd">            * energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction</span>
 
-<span class="sd">            coordinates: coordinates128.txt coordinates of the cluster centered on the ion</span>
+<span class="sd">            * coordinates: coordinates128.txt coordinates of the cluster centered on the ion</span>
 
-<span class="sd">            topology: topology128.txt topology of the system Charge-sigma-epsilon</span>
+<span class="sd">            * topology: topology128.txt topology of the system Charge-sigma-epsilon</span>
 
-<span class="sd">       Input parameters:</span>
+<span class="sd">       Inputs:</span>
 <span class="sd">            input_params --&gt; collection of input parameters</span>
 
 <span class="sd">            flag_files   --&gt; flag which activate the parsing for a certain type of file</span>
 <span class="sd">      </span>
 <span class="sd">       Returns:</span>
 <span class="sd">            collection of parsed data</span>
-<span class="sd">            </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_params</span><span class="p">,</span> <span class="n">flag_files</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Initialization</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ip</span> <span class="o">=</span> <span class="n">input_params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flag_files</span>   <span class="o">=</span> <span class="n">flag_files</span>
     
@@ -222,7 +210,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method with which is possible to evaluate the distance descriptor</span>
 
-<span class="sd">        Input Parameters:</span>
+<span class="sd">        Inputs:</span>
 <span class="sd">            self.coordinates</span>
 
 <span class="sd">        Returns:</span>
@@ -278,7 +266,7 @@
 <span class="sd">        This function take as input the parsed input files, or forces or energies, the evaluated</span>
 <span class="sd">        distances, the size of training and test set and returns a class </span>
 <span class="sd">        </span>
-<span class="sd">        Input Parameters:</span>
+<span class="sd">        Inputs:</span>
 
 <span class="sd">           * input_params[&#39;topol &#39;]       = output of parse_input for topology </span>
 <span class="sd">           * input_params[&#39;forces&#39;]       = output of parse_input for forces</span>
@@ -332,10 +320,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_force</span><span class="p">(</span><span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;train&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">test_set</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_force</span><span class="p">(</span><span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">)</span> 
     
-<div class="viewcode-block" id="input_setup.initialize_energy"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.input_setup.initialize_energy">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Initialize energy set</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">initialize_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="c1">#            Initialize energy set</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipip</span><span class="p">[</span><span class="s1">&#39;n_vs&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>            
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ipip</span><span class="p">[</span><span class="s1">&#39;counterpoise&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">_n_water</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">[</span><span class="s1">&#39;N_water&#39;</span><span class="p">]:</span>
@@ -398,7 +384,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span><span class="p">[</span><span class="s1">&#39;x_test_vs2</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_n_water</span><span class="p">)]</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">[</span><span class="s1">&#39;d_vet_vs2</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_n_water</span><span class="p">)][</span><span class="bp">self</span><span class="o">.</span><span class="n">N_train</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_train</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">N_test</span> <span class="p">,</span> <span class="p">:]</span>
                     
         <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span>         <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flag</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span>
             
 <div class="viewcode-block" id="input_setup.eval_energy"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.input_setup.eval_energy">[docs]</a>    <span class="k">def</span> <span class="nf">eval_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -519,10 +505,8 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;not working here&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
                     
-<div class="viewcode-block" id="input_setup.initialize_force"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.input_setup.initialize_force">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_force</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Initialize force set</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">initialize_force</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="c1">#Initialize force set</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">[</span><span class="s1">&#39;n_vs&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">_n_water</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">[</span><span class="s1">&#39;N_water&#39;</span><span class="p">]:</span>
                 <span class="n">d</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -608,7 +592,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span><span class="p">[</span><span class="s1">&#39;weights_vs2</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_n_water</span><span class="p">)]</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ip</span><span class="p">[</span><span class="s1">&#39;weight</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_n_water</span><span class="p">)]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span><span class="p">[</span><span class="s1">&#39;force</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_n_water</span><span class="p">)]</span>        <span class="o">=</span> <span class="n">f</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span>      </div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_s</span>      
              
 <div class="viewcode-block" id="input_setup.eval_force"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.input_setup.eval_force">[docs]</a>    <span class="k">def</span> <span class="nf">eval_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flag</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -763,10 +747,9 @@
 
 <div class="viewcode-block" id="training_set"><a class="viewcode-back" href="../../lrrde-code.html#lrrde.parse_input.training_set">[docs]</a><span class="k">class</span> <span class="nc">training_set</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Takes as input the energy and the force training set and build the set of function X,W,v,y</span>
-<span class="sd">        necessary for the fitting procedure</span>
+<span class="sd">        Takes as input the energy and the force training set and build the set of function X,W,v,y necessary for the fitting procedure</span>
 
-<span class="sd">        Input Parameters:</span>
+<span class="sd">        Inputs:</span>
 <span class="sd">            energy_ts energy training set</span>
 <span class="sd">            force_ts force training set</span>
 

@@ -7,41 +7,28 @@
     .. moduleauthor:: Matteo Peluso
 """
 
-import numpy as np
-#from lrr_de_constant import *
-import matplotlib.pyplot as plt
-import os
-#from read import *
-#from distances import *
-#from tool import *
-
 class parser():
     """
     Class parser
 
-       The parser takes as input files which names are already
-       decided
-            forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account
+       The parser takes as input files which names are already decided
+            * forces: forces128.txt where 128 will be the number of water molecules of the spherical cluster taken in account
 
-            energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction
+            * energies: complexation128.txt the term complexation refers to the fact that the QM calculation have been evaluated with a Counterpoise correction
 
-            coordinates: coordinates128.txt coordinates of the cluster centered on the ion
+            * coordinates: coordinates128.txt coordinates of the cluster centered on the ion
 
-            topology: topology128.txt topology of the system Charge-sigma-epsilon
+            * topology: topology128.txt topology of the system Charge-sigma-epsilon
 
-       Input parameters:
+       Inputs:
             input_params --> collection of input parameters
 
             flag_files   --> flag which activate the parsing for a certain type of file
       
        Returns:
             collection of parsed data
-            
     """
     def __init__(self, input_params, flag_files):
-        """
-            Initialization
-        """
         self.ip = input_params
         self.flag_files   = flag_files
     
@@ -72,7 +59,7 @@ class parser():
         """
         Method with which is possible to evaluate the distance descriptor
 
-        Input Parameters:
+        Inputs:
             self.coordinates
 
         Returns:
@@ -128,7 +115,7 @@ class input_setup():
         This function take as input the parsed input files, or forces or energies, the evaluated
         distances, the size of training and test set and returns a class 
         
-        Input Parameters:
+        Inputs:
 
            * input_params['topol ']       = output of parse_input for topology 
            * input_params['forces']       = output of parse_input for forces
@@ -183,9 +170,7 @@ class input_setup():
             self.test_set     = self.eval_force(flag = "test") 
     
     def initialize_energy(self):
-        """
-            Initialize energy set
-        """
+#            Initialize energy set
         if self.ipip['n_vs'] == 0:            
             if self.ipip['counterpoise'] == False:
                 for _n_water in self.ip['N_water']:
@@ -370,9 +355,7 @@ class input_setup():
             return -1
                     
     def initialize_force(self):
-        """
-            Initialize force set
-        """
+            #Initialize force set
         if self.ip['n_vs'] == 0:
             for _n_water in self.ip['N_water']:
                 d, f = [], []
@@ -613,10 +596,9 @@ class input_setup():
 
 class training_set():
     """
-        Takes as input the energy and the force training set and build the set of function X,W,v,y
-        necessary for the fitting procedure
+        Takes as input the energy and the force training set and build the set of function X,W,v,y necessary for the fitting procedure
 
-        Input Parameters:
+        Inputs:
             energy_ts energy training set
             force_ts force training set
 

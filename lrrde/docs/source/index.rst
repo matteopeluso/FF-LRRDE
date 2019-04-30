@@ -20,4 +20,4 @@ of an ion in condensed phase.
    :name: lrrde
 
    lrrde-code
-
+   lrrde-fitting-code     

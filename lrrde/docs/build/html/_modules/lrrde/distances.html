@@ -84,7 +84,8 @@
 </ul>
 <p class="caption"><span class="caption-text">SOURCE DOCUMENTATION:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-code.html">Python API documentation Force Field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lrrde-fitting-code.html">Python API documentation Fitting</a></li>
 </ul>
 
             
@@ -155,13 +156,18 @@
 <span class="sd">        Function which evaluate the distances between our ion and the water molecules,</span>
 <span class="sd">        returns a vector</span>
 <span class="sd">        </span>
-<span class="sd">        Case index = 1 --&gt; Single ion in aqueous solution</span>
-<span class="sd">        Case index = 2 --&gt; Single ion with virtual sites in acqueous solution</span>
+<span class="sd">        Inputs:</span>
+
+<span class="sd">            Case index = 1 --&gt; Single ion in aqueous solution</span>
+<span class="sd">            Case index = 2 --&gt; Single ion with virtual sites in acqueous solution</span>
 <span class="sd">        </span>
-<span class="sd">        @param mat    = matrix of coordinates</span>
-<span class="sd">        @param n_atom = number of atoms of the system</span>
-<span class="sd">        @param index  = index of or the single ion, or the last virtual site </span>
-<span class="sd">        @param n_vs   = number of virtual sites</span>
+<span class="sd">            mat    = matrix of coordinates</span>
+<span class="sd">            n_atom = number of atoms of the system</span>
+<span class="sd">            index  = index of or the single ion, or the last virtual site </span>
+<span class="sd">            n_vs   = number of virtual sites</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           np array of Euclidian distances</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -171,9 +177,7 @@
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
     
     <span class="k">elif</span> <span class="n">index</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Case of Virtual Site</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#Case of Virtual Site</span>
         <span class="k">if</span> <span class="n">n_vs</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">n_atom</span> <span class="o">=</span> <span class="n">n_atom</span> <span class="o">+</span> <span class="n">n_vs</span>
             <span class="n">d</span><span class="p">,</span> <span class="n">d_vs1</span><span class="p">,</span> <span class="n">d_vs2</span>      <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -200,13 +204,18 @@
 <span class="sd">        Function which evaluate the distances between our ion and the water molecules,</span>
 <span class="sd">        returns a matrix</span>
 <span class="sd">        </span>
-<span class="sd">        Case index = 1 --&gt; Single ion in aqueous solution</span>
-<span class="sd">        Case index = 2 --&gt; SIngle ion with virtual sites in acqueous solution</span>
+<span class="sd">        Inputs:</span>
+<span class="sd">            Case index = 1 --&gt; Single ion in aqueous solution</span>
+<span class="sd">            Case index = 2 --&gt; SIngle ion with virtual sites in acqueous solution</span>
+<span class="sd">            </span>
+<span class="sd">            mat    = matrix of coordinates</span>
+<span class="sd">            n_atom = number of atoms of the system</span>
+<span class="sd">            index  = index of or the single ion, or the last virtual site </span>
+<span class="sd">            n_vs   = number of virtual sites</span>
 <span class="sd">        </span>
-<span class="sd">        @param mat    = matrix of coordinates</span>
-<span class="sd">        @param n_atom = number of atoms of the system</span>
-<span class="sd">        @param index  = index of or the single ion, or the last virtual site </span>
-<span class="sd">        @param n_vs   = number of virtual sites</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            np array of matrix deviation distance</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">d</span>      <span class="o">=</span> <span class="p">[]</span>
@@ -219,9 +228,7 @@
     <span class="k">elif</span> <span class="n">index</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                
         <span class="k">if</span> <span class="n">n_vs</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">                Linear Geometry</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1">#    Linear Geometry</span>
             <span class="n">n_atom</span> <span class="o">=</span> <span class="n">n_atom</span> <span class="o">+</span> <span class="n">n_vs</span>
             <span class="n">d</span><span class="p">,</span> <span class="n">dvs1</span><span class="p">,</span> <span class="n">dvs2</span>      <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
             

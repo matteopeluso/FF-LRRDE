@@ -1,7 +1,7 @@
 """
     .. module:: multi_objective
-
     .. moduleauthor:: Matteo Peluso matteo.peluso@sns.it 
+
 """
 
 
@@ -16,19 +16,16 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 #from fast_loocv import * 
 #from numba import jit
 
-
-
-
-
-# ------------------------------------ PROCEDURE DE + LRR ----------------------------------------------#
-
 class eval_lrrde():
     """
         Procedure of fitting the new data: DE --> Normal Solver/fast LOOCV
-        
-        Params:
-                - data_set  ---> initial data set 
-                - params_de ---> parameters for the  differential evolution search
+
+        Inputs:
+            data_set  : data container  
+            params_de : params differential evolution
+
+        Returns:
+            Evaluated coefficients from the ridge regression with corresponding loocv
         
     """
     def fitness(self,x):
@@ -55,10 +52,10 @@ class eval_lrrde():
         self.log['xbest'] = []
     
         if self.data_set.input_params['n_functions'] in [0,1,2,7]:
-            """
-                It is necessary to scale the QM reference data if the
-                value of the atom charge is fixed
-            """
+            
+            #    It is necessary to scale the QM reference data if the
+            #    value of the atom charge is fixed
+        
             if self.data_set.input_params['q_value'] or self.data_set.input_params['q_value'] == 0.0:
                 y_c = self.data_set.input_params['q_value']*self.data_set.q
             else:
@@ -90,8 +87,13 @@ class eval_lrrde():
         """
             Differential Evolution
             
-            @params borders  ---> borders of the alpha space
-            @params para     ---> params differential evolution
+            Inputs:
+             borders  : borders of the alpha space
+             para     : params differential evolution
+
+            Returns:
+                evaluation of the hyperparameter which minimize the loocv
+
         """
         
         # DE default params    
