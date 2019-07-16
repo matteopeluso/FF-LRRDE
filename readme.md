@@ -1,5 +1,5 @@
-# Documentation and code for the Force Field --- Linear Ridge Regression Differential Evolution Procedure
-
+# Documentation and code for the FF-LRRDE Procedure
+## Force Field - Linear Ridge Regression Differential Evolution
 For a complete introductio to the methodology of fitting or parameterization of a force field
 start the tutorials on the related website.
 
